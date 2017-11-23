@@ -150,7 +150,7 @@ def get_business(bearer_token, business_id):
     return request(API_HOST, business_path, bearer_token)
 
 
-def query_api(term, location):
+def query_api(term, location, file_name):
     """Queries the API by the input values from the user.
 
     Args:
@@ -167,7 +167,12 @@ def query_api(term, location):
         print(u'No businesses for {0} in {1} found.'.format(term, location))
         return
 
-    restos = []
+    resto_name = []
+    rating = []
+    latitude = []
+    longitude = []
+    review_count = []
+    rank = []
 
     for i in range(0,5):
 
@@ -178,11 +183,22 @@ def query_api(term, location):
 
         print(u'Result for business "{0}" found:'.format(business_id))
 
-        restos.append(business_id)
-        restos.append(response['coordinates'])
-        print(restos)
-    df = pd.DataFrame(restos)
-    df.to_csv('restos_test.csv')
+        rank.append(i)
+        resto_name.append(business_id)
+        latitude.append(response['coordinates']['latitude'])
+        longitude.append(response['coordinates']['longitude'])
+        review_count.append(response['review_count'])
+        rating.append(response['rating'])
+
+    restos = {
+        'rating': rating,
+        'review_count': review_count,
+        'latitude': latitude,
+        'longitude': longitude,
+        'name': resto_name,
+        'rank': rank
+    }
+    pd.DataFrame(restos).to_csv(u'{0}.csv'.format(file_name))
 
 
 
@@ -193,12 +209,15 @@ def main():
                         type=str, help='Search term (default: %(default)s)')
     parser.add_argument('-l', '--location', dest='location',
                         default=DEFAULT_LOCATION, type=str,
-                        help='Search location (default: %(default)s)')
+                    help='Search location (default: %(default)s)')
+    parser.add_argument('-f', '--file', dest='file_name',
+                    default='test.csv', type=str,
+                    help='Name of csv file (default: %(default)s)')
 
     input_values = parser.parse_args()
 
     try:
-        query_api(input_values.term, input_values.location)
+        query_api(input_values.term, input_values.location, input_values.file_name)
     except HTTPError as error:
         sys.exit(
             'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(
