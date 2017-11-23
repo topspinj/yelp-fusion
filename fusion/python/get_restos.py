@@ -24,6 +24,7 @@ import pprint
 import requests
 import sys
 import urllib
+import pandas as pd
 
 
 # This client code can run on Python 2.x or 3.x.  Your imports can be
@@ -43,9 +44,8 @@ except ImportError:
 # OAuth credential placeholders that must be filled in by users.
 # You can find them on
 # https://www.yelp.com/developers/v3/manage_app
-CLIENT_ID = None
-CLIENT_SECRET = None
-
+CLIENT_ID = x
+CLIENT_SECRET = x
 
 # API constants, you shouldn't have to change these.
 API_HOST = 'https://api.yelp.com'
@@ -58,7 +58,7 @@ GRANT_TYPE = 'client_credentials'
 # Defaults for our simple example.
 DEFAULT_TERM = 'dinner'
 DEFAULT_LOCATION = 'San Francisco, CA'
-SEARCH_LIMIT = 3
+SEARCH_LIMIT = 5
 
 
 def obtain_bearer_token(host, path):
@@ -111,8 +111,6 @@ def request(host, path, bearer_token, url_params=None):
     headers = {
         'Authorization': 'Bearer %s' % bearer_token,
     }
-
-    print(u'Querying {0} ...'.format(url))
 
     response = requests.request('GET', url, headers=headers, params=url_params)
 
@@ -169,15 +167,23 @@ def query_api(term, location):
         print(u'No businesses for {0} in {1} found.'.format(term, location))
         return
 
-    business_id = businesses[0]['id']
+    restos = []
 
-    print(u'{0} businesses found, querying business info ' \
-        'for the top result "{1}" ...'.format(
-            len(businesses), business_id))
-    response = get_business(bearer_token, business_id)
+    for i in range(0,5):
 
-    print(u'Result for business "{0}" found:'.format(business_id))
-    pprint.pprint(response, indent=2)
+        business_id = businesses[i]['id']
+
+        print(u'Result {0}: "{1} ...'.format(i, business_id))
+        response = get_business(bearer_token, business_id)
+
+        print(u'Result for business "{0}" found:'.format(business_id))
+
+        restos.append(business_id)
+        restos.append(response['coordinates'])
+        print(restos)
+    df = pd.DataFrame(restos)
+    df.to_csv('restos_test.csv')
+
 
 
 def main():
