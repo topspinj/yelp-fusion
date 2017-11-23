@@ -9,6 +9,7 @@ from the search query.
 Please refer to [API documentation](https://www.yelp.com/developers/documentation/v3)
 for more details.
 
+**Note:** This script was modified by [Jill](https://github.com/topspinj) to output top 5 results as a csv file.
 
 ## Steps to run
 
@@ -19,4 +20,4 @@ Run the code sample without specifying any arguments:
 `python sample.py`
 
 Run the code sample by specifying the optional arguments:
-`python sample.py --term="bars" --location="San Francisco, CA"`
+`python sample.py --term="bars" --location="San Francisco, CA --file="san_fran_bars"`

@@ -14,7 +14,7 @@ This program requires the Python requests library, which you can install via:
 `pip install -r requirements.txt`.
 
 Sample usage of the program:
-`python sample.py --term="bars" --location="San Francisco, CA"`
+`python sample.py --term="bars" --location="San Francisco, CA --file="san_fran_bars"`
 """
 from __future__ import print_function
 
@@ -58,6 +58,7 @@ GRANT_TYPE = 'client_credentials'
 # Defaults for our simple example.
 DEFAULT_TERM = 'dinner'
 DEFAULT_LOCATION = 'San Francisco, CA'
+DEFAULT_FILE_NAME = 'san_fran_dinner'
 SEARCH_LIMIT = 10
 
 
@@ -156,6 +157,7 @@ def query_api(term, location, file_name):
     Args:
         term (str): The search term to query.
         location (str): The location of the business to query.
+        file_name (str): File name of output csv.
     """
     bearer_token = obtain_bearer_token(API_HOST, TOKEN_PATH)
 
@@ -215,7 +217,7 @@ def main():
                         default=DEFAULT_LOCATION, type=str,
                     help='Search location (default: %(default)s)')
     parser.add_argument('-f', '--file', dest='file_name',
-                    default='test.csv', type=str,
+                    default=DEFAULT_FILE_NAME, type=str,
                     help='Name of csv file (default: %(default)s)')
 
     input_values = parser.parse_args()
