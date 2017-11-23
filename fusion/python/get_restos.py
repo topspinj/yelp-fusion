@@ -25,7 +25,7 @@ import requests
 import sys
 import urllib
 import pandas as pd
-
+import config
 
 # This client code can run on Python 2.x or 3.x.  Your imports can be
 # simpler if you only need one of those.
@@ -44,8 +44,8 @@ except ImportError:
 # OAuth credential placeholders that must be filled in by users.
 # You can find them on
 # https://www.yelp.com/developers/v3/manage_app
-CLIENT_ID = x
-CLIENT_SECRET = x
+CLIENT_ID = config.client_id
+CLIENT_SECRET = config.client_secret
 
 # API constants, you shouldn't have to change these.
 API_HOST = 'https://api.yelp.com'
