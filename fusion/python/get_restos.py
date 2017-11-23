@@ -58,7 +58,7 @@ GRANT_TYPE = 'client_credentials'
 # Defaults for our simple example.
 DEFAULT_TERM = 'dinner'
 DEFAULT_LOCATION = 'San Francisco, CA'
-SEARCH_LIMIT = 5
+SEARCH_LIMIT = 10
 
 
 def obtain_bearer_token(host, path):
@@ -160,6 +160,7 @@ def query_api(term, location, file_name):
     bearer_token = obtain_bearer_token(API_HOST, TOKEN_PATH)
 
     response = search(bearer_token, term, location)
+    pprint.pprint(response, indent=2)
 
     businesses = response.get('businesses')
 
@@ -198,7 +199,7 @@ def query_api(term, location, file_name):
         'name': resto_name,
         'rank': rank
     }
-    pd.DataFrame(restos).to_csv(u'{0}.csv'.format(file_name))
+    pd.DataFrame(restos).to_csv(u'restos/{0}.csv'.format(file_name))
 
 
 
