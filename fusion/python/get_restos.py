@@ -174,6 +174,7 @@ def query_api(term, location, file_name):
     longitude = []
     review_count = []
     rank = []
+    city = []
 
     for i in range(0,5):
 
@@ -190,6 +191,7 @@ def query_api(term, location, file_name):
         longitude.append(response['coordinates']['longitude'])
         review_count.append(response['review_count'])
         rating.append(response['rating'])
+        city.append(response['location']['city'])
 
     restos = {
         'rating': rating,
@@ -197,7 +199,8 @@ def query_api(term, location, file_name):
         'latitude': latitude,
         'longitude': longitude,
         'name': resto_name,
-        'rank': rank
+        'rank': rank,
+        'city': city
     }
     pd.DataFrame(restos).to_csv(u'restos/{0}.csv'.format(file_name))
 
